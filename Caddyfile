@@ -1,0 +1,35 @@
+# redirect from www.zsrtc.xyz to https://zsrtc.xyz
+# 这里把www.zsrtc.xyz重定向到https://zsrtc.xyz
+www.zsrtc.xyz {
+    redir https://zsrtc.xyz{uri}
+}
+
+# proxy for https://zsrtc.xyz
+# 代理ion-web-app页面
+zsrtc.xyz:443 {
+    reverse_proxy localhost:8080
+}
+
+# proxy for wss://zsrtc.xyz:5551
+# 代理信令wss://zsrtc.xyz:5551
+zsrtc.xyz:5551
+
+# i run biz on 5552, modify port in biz.toml
+# 因为5551被代理使用，所以biz端口换5552
+# add header for ws
+reverse_proxy localhost:5552 {
+    header_up Host {host}
+    header_up X-Real-IP {remote_host}
+    header_up X-Forwarded-For {remote_host}
+    header_up X-Forwarded-Proto {scheme}
+}
+
+# caddy log
+# caddy 日志配置
+log {
+    output file /root/caddy/caddy.log {
+        roll_size     100MiB
+        roll_keep     3
+    }
+    level DEBUG
+}
