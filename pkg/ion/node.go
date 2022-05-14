@@ -10,6 +10,7 @@ import (
 	nrpc "github.com/cloudwebrtc/nats-grpc/pkg/rpc"
 	"github.com/nats-io/nats.go"
 	log "github.com/pion/ion-log"
+	"github.com/pion/ion/pkg/proto"
 	"github.com/pion/ion/pkg/util"
 	"google.golang.org/grpc"
 )
@@ -69,6 +70,11 @@ func (n *Node) NatsConn() *nats.Conn {
 //KeepAlive Upload your node info to registry.
 func (n *Node) KeepAlive(node discovery.Node) error {
 	return n.ndc.KeepAlive(node)
+}
+
+func (n *Node) GetAllNode() (*discovery.GetResponse, error) {
+	resp, err := n.ndc.Get(proto.ServiceALL, map[string]interface{}{})
+	return resp, err
 }
 
 func (n *Node) NewNatsRPCClient(service, peerNID string, parameters map[string]interface{}) (*nrpc.Client, error) {
