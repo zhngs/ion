@@ -89,5 +89,5 @@ func main() {
 	}
 	log.Infof("getallnode %v", resp.Nodes)
 
-	select {}
+	insp.Serve()
 }
